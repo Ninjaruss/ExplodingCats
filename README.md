@@ -1,21 +1,26 @@
-# Lab todo
+Description:
+There are 2 players, one pile of card to draw from, and one pile of card for discard.
+There are 2 types of cards, action cards, and explode/defuse cards.
+In each player’s turn, player play as many action cards as they want, and end the turn with drawing a card.
+The last person alive wins the game.
 
-## Opening projects
-- Open this react directory with vs code.
-- Open a terminal in vs code an run `npm i`
-- Run `npm start`
-- Open the spark directory with intelij
-- Start the spark app
+Explode/Defuse;
+When player draw an explode card, they explode and lose unless they can play a defuse card. If player played defuse card, the player can insert the explode card back to the draw deck secretly. 
 
-## Todos
-- Demo making a client request from the FE to the BE using axios
-- Add get parameters to send data to a get endpoint
-- Add post parameters to send more complicated data to the back end
-- Use a dto to send some structured data from server to client
-- Use a stateful variable on the client to display that data
+Action Cards:
+See the future: when player plays this card, the player can see the top 3 cards in the draw pile.
+Skip: when player plays this card, the player ends their turn without drawing.
+Shuffle: when player plays this card, the player can shuffle the draw pile.
+Two of a kind: If a player play 2 of a kind cards, the player can blindly take a card from the opposite player.
+Three of a kind: If a player play 3 of a kind cards, the player can name the card to take from the opposite player.
+Nope: this card can be played at anytime during the game to stop any actions except explode and defuse.
+
+Breakdown of Features and Team Member Tasks:
+Matchmaking  :  Tyler &  Yan
+Leaderboard  :  Tyler 
+Game loop  :  Yan &  Russell
+Card Manipulation  :  Russell
+Active player  :  Siam
+UI  :  Siam           
 
 
-## FE 
-- Create a component and import to use it another file
-- Do a conditional render
-- Use a function to calculate what to render
