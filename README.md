@@ -1,5 +1,5 @@
 ## UI Mock-up
-https://github.com/sfsu-csc-413-fall19/final-project-styr/issues/1#issue-519626818
+<img width="852" alt="Screen Shot 2019-11-07 at 6 28 02 PM" src="https://user-images.githubusercontent.com/23036145/68445448-d3494680-018e-11ea-9423-e24a06c7ac79.png">
 
 ## Description:
 There are 2 players, one pile of card to draw from, and one pile of card for discard.
