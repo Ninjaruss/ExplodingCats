@@ -1,3 +1,6 @@
+## UI Mock-up
+https://github.com/sfsu-csc-413-fall19/final-project-styr/issues/1#issue-519626818
+
 ## Description:
 There are 2 players, one pile of card to draw from, and one pile of card for discard.
 There are 2 types of cards, action cards, and explode/defuse cards.
