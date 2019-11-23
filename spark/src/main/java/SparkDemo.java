@@ -7,6 +7,8 @@ import java.util.List;
 public class SparkDemo {
   public static void main(String[] args) {
     port(1234);
+    webSocket("/ws", WebSocketHandler.class);
+
     // calling get will make your app start listening for the GET path with the /hello endpoint
     get("/hello", (req, res) -> "Hello World");
 
@@ -17,14 +19,11 @@ public class SparkDemo {
     });
 
     post("/postApi", (req, res) -> {
-      System.out.println(req.body());
-      NoteDto note = new NoteDto("oiergioergoij", "This is some note in mongo");
-      NoteDto note2 = new NoteDto("oiergioergoij", "This is some more text in mongo");
-      List<NoteDto> noteList = new ArrayList<>();
-      noteList.add(note);
-      noteList.add(note2);
-      Gson gson = new Gson();
-      return gson.toJson(noteList);
+      //Gson gson = new Gson();
+      //return gson.toJson(noteList);
+      return null;
     });
+
+
   }
 }
