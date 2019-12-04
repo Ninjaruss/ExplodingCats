@@ -1,23 +1,22 @@
 package Routes;
 
-import DTO.NoteObject;
-import DTO.Response;
+import DTO.*;
 
 public class DeleteRoute extends RouteObject{
-    public DeleteRoute(String _id) {
+    public DeleteRoute(String name) {
         try {
             // INSERT NOTE INTO DATABASE COMMAND
-            NoteObject note = noteDatabase.deleteNote(_id);
+            User user = userDataBase.deleteUser(name);
 
             // IF DONE SUCCESSFULLY RETURN SUCCESSFUL RESPONSE
             localRes = new Response.Builder()
-                    .set_id(note._id)
-                    .addResponse(note)
-                    .setCode("Note deleted successfully.")
+                    .set_id(user._id)
+                    .addResponse(user)
+                    .setCode("User deleted successfully.")
                     .build();
         } catch (Exception e) {
             localRes = new Response.Builder()
-                    .setCode("ERROR: Failed to delete note.")
+                    .setCode("ERROR: Failed to delete user.")
                     .build();
         }
     }

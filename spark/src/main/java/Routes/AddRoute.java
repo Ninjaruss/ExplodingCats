@@ -1,25 +1,24 @@
 package Routes;
 
-import DTO.NoteObject;
-import DTO.Response;
+import DTO.*;
 
-public class StoreRoute extends RouteObject{
-    public StoreRoute(String body){
+public class AddRoute extends RouteObject{
+    public AddRoute(String name){
         try{
             // INSERT NOTE INTO DATABASE COMMAND
-            NoteObject note = noteDatabase.storeNote(body);
+            User user = userDataBase.addUser(name);
 
             // IF DONE SUCCESSFULLY RETURN SUCCESSFUL RESPONSE
             localRes = new Response.Builder()
-                    .set_id(note._id)
-                    .addResponse(note)
-                    .setCode("Note stored successfully.")
+                    .set_id(user._id)
+                    .addResponse(user)
+                    .setCode("User added successfully.")
                     .build();
         }
         catch(Exception e){
             e.printStackTrace();
             localRes = new Response.Builder()
-                    .setCode("ERROR: Failed to store note.")
+                    .setCode("ERROR: Failed to add user.")
                     .build();
         }
     }

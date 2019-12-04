@@ -1,7 +1,8 @@
-package Users;
+package DAO;
 
 import java.util.*;
 
+import DTO.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -55,17 +56,17 @@ public class UserService {
         return user;
     }
 
-    public User getUser(String _id){
-        Document search = userList.find(eq("_id", new ObjectId(_id) )).first();
+    public User getUser(String name){
+        Document search = userList.find(eq("name", name)).first();
         User foundUser = new User(search.getObjectId("_id").toString(),
                 search.getString("name"),
                 search.getDate("date"));
         return foundUser;
     }
 
-    public User deleteUser(String _id){
-        User foundUser = getUser(_id);
-        userList.deleteOne(eq("_id", _id));
+    public User deleteUser(String name){
+        User foundUser = getUser(name);
+        userList.deleteOne(eq("name", name));
         return foundUser;
     }
 
@@ -75,8 +76,6 @@ public class UserService {
         try {
             while (cursor.hasNext()) {
                 Document current = cursor.next();
-                //String noteJson = cursor.next().toJson();
-                //NoteObject note = gson.fromJson(noteJson, NoteObject.class);
                 User user = new User(
                         current.getObjectId("_id").toString(),
                         current.getString("name"),

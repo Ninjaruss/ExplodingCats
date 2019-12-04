@@ -9,13 +9,13 @@ public class Response {
     private Date date;
     private String _id;
     private String responseCode;
-    private ArrayList<NoteObject> response;
+    private ArrayList<User> response;
 
     public static class Builder{
         private Date date = null;
         private String _id = "null";
         private String responseCode = "ERROR";
-        private ArrayList<NoteObject> response = new ArrayList<NoteObject>();
+        private ArrayList<User> response = new ArrayList<User>();
 
         // Sets a date when this object is created
         public Builder(){
@@ -27,8 +27,8 @@ public class Response {
             return this;
         }
 
-        public Builder addResponse(NoteObject note){
-            this.response.add(note);
+        public Builder addResponse(User user){
+            this.response.add(user);
             return this;
         }
 

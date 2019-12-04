@@ -1,23 +1,22 @@
 package Routes;
 
-import DTO.NoteObject;
-import DTO.Response;
+import DTO.*;
 
 public class GetRoute extends RouteObject{
-    public GetRoute(String _id) {
+    public GetRoute(String name) {
         try {
             // INSERT NOTE INTO DATABASE COMMAND
-            NoteObject note = noteDatabase.getNote(_id);
+            User user = userDataBase.getUser(name);
 
             // IF DONE SUCCESSFULLY RETURN SUCCESSFUL RESPONSE
             localRes = new Response.Builder()
-                    .set_id(note._id)
-                    .addResponse(note)
-                    .setCode("Fetched note successfully.")
+                    .set_id(user._id)
+                    .addResponse(user)
+                    .setCode("Fetched user successfully.")
                     .build();
         } catch (Exception e) {
             localRes = new Response.Builder()
-                    .setCode("ERROR: Failed to fetch note.")
+                    .setCode("ERROR: Failed to fetch user.")
                     .build();
         }
     }

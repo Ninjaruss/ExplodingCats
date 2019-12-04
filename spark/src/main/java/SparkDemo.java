@@ -3,14 +3,32 @@ import static spark.Spark.*;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
+import Routes.*;
 
 public class SparkDemo {
   public static void main(String[] args) {
     port(1234);
     webSocket("/ws", WebSocketHandler.class);
 
-    // calling get will make your app start listening for the GET path with the /hello endpoint
-    get("/hello", (req, res) -> "Hello World");
+    get("/get", (req, res) -> {
+      RouteObject route = new GetRoute(req.queryParams("name"));
+      return route.localRes.getJson();
+    });
+    post("/delete", (req, res) ->{
+      RouteObject route = new DeleteRoute(req.queryParams("name"));
+      return route.localRes.getJson();
+    });
+    get("/list", (req, res) ->{
+      RouteObject route = new ListRoute();
+      System.out.println(route.localRes.getJson());
+      return route.localRes.getJson();
+    });
+    post("/add", (req, res) ->{
+      RouteObject route = new AddRoute(req.body());
+      System.out.println(route.localRes.getJson());
+      return route.localRes.getJson();
+    });
+
 
     get("/api", (req, res) -> {
       System.out.println(req.queryMap().get("key").value());
