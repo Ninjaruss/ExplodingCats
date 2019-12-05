@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import axios from 'axios';
 import './App.css';
 
@@ -15,27 +15,28 @@ function App() {
       .catch(console.log);
   };
 
-  const testPost = () => {
-    const body = {
-      _id: 'abc',
-      data: text,
-    };
-    axios.post('/postApi', body)
-      .then(console.log)
-      .catch(console.log);
-  };
+  // const testPost = () => {
+  //   const body = {
+  //     _id: 'abc',
+  //     data: text,
+  //   };
+  //   axios.post('/postApi', body)
+  //     .then(console.log)
+  //     .catch(console.log);
+  // };
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+        <h1>Welcome to Exploding Kittens</h1>
+        <h2>Enter Your Name Here:</h2>
         <p>
           {responseText}
         </p>
         <input value={text} onChange={e => setText(e.target.value)} />
         <hr />
-        <button onClick={handleClick}>Click Me</button>
-        <button onClick={testPost}>Test Post</button>
+        <button onClick={handleClick}>Enter Game</button>
       </header>
     </div>
   );
