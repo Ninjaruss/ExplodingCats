@@ -13,6 +13,7 @@ public class Game{
     // This game's identifier
     private final int id;
 
+    // Lobby status
     public enum Status{
         WAITING, IN_PROGRESS, FINISHED;
     }
@@ -23,14 +24,17 @@ public class Game{
 
     private final Deck deck;
     private final PlayStack stack;
+    private String winner;
+    private boolean stillPlaying;
     private final int playerMin = 2;
     private final int playerMax = 4;
-    private String winner;
 
     public Game(){
         this.id = GAME_COUNT++;
+        this.status = Status.WAITING;
         this.deck = new Deck().standard();
         this.stack = new PlayStack();
+        this.stillPlaying = true;
         players = new ConcurrentHashMap<User, ArrayList<CardObject>>();
     }
 
@@ -43,7 +47,7 @@ public class Game{
         players.put(u, new ArrayList<CardObject>());
 
         if (players.size() == playerMax){
-            status = Status.IN_PROGRESS;
+            startGame();
         }
     }
 
@@ -58,7 +62,30 @@ public class Game{
         if (players.size() < playerMin){
             throw new RuntimeException("Not enough players to start the game.");
         }
+        status = Status.IN_PROGRESS;
 
+        deck.shuffle();
+        for(ArrayList<CardObject> hand : players.values()) {
+            for (int i = 0; i < 7; i++) {
+                hand.add(deck.draw());
+            }
+            hand.add(new Defuse());
+        }
+        deck.addNewCard("defuse", 2);
+        deck.shuffle();
+
+        // Shuffle player order
+        List<Map.Entry<User, ArrayList<CardObject>>> entries = new ArrayList<>(players.entrySet());
+        Collections.shuffle(entries);
+        Map<User, ArrayList<CardObject>> shuffledMap = new LinkedHashMap<>();
+        for (Map.Entry<User, ArrayList<CardObject>> entry : entries) {
+            shuffledMap.put(entry.getKey(), entry.getValue());
+        }
+
+
+        while (stillPlaying){
+
+        }
     }
 
     // Read-only functions ////////////////////////////
