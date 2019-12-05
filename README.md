@@ -20,11 +20,12 @@
 - Nope: this card can be played at anytime during the game to stop any actions except explode and defuse.
 
 ## Breakdown of Features and Team Member Tasks:
+*- Game loop  :  Yan &  Russell
+*- Card Manipulation  :  Russell
+*- UI  :  Tyler +Siam   
+- Lobby:  Siam
 - Matchmaking  :  Tyler &  Yan
-- Leaderboard  :  Tyler 
-- Game loop  :  Yan &  Russell
-- Card Manipulation  :  Russell
-- Active player  :  Siam
-- UI  :  Siam           
+- Leaderboard  :  Siam 
+    
 
 
