@@ -8,8 +8,12 @@ public class Deck{
 
     public Deck standard(){
         deck.removeAllElements();
-        addNewCard("", 3);
-
+        addNewCard("negate", 5);
+        addNewCard("attack", 4);
+        addNewCard("skip", 4);
+        addNewCard("favor", 4);
+        addNewCard("shuffle", 4);
+        addNewCard("seethefuture", 5);
         return this;
     }
 
