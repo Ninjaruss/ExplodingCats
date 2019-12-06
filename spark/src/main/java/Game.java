@@ -84,7 +84,16 @@ public class Game{
 
 
         while (stillPlaying){
+            // play first player's turn
+            // wait until player makes move or timer ends
 
+            // place card in stack if card is played, allow other players to play cards on top
+            // execute stack
+
+            // draw card, explode if bomb (defuse bomb if defuse present)
+            // check if only one player is left, if yes then end the game
+
+            // go to next player's turn
         }
     }
 
