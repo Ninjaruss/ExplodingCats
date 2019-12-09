@@ -2,6 +2,7 @@ import React from 'react';
 // import logo from './logo.svg';
 import axios from 'axios';
 import './App.css';
+import KittenCard from './KittenCard'
 
 function App() {
   const [text, setText] = React.useState(''); // creates state variable, retuns tuple
@@ -34,6 +35,7 @@ function App() {
         <p>
           {responseText}
         </p>
+        <KittenCard></KittenCard>
         <input value={text} onChange={e => setText(e.target.value)} />
         <hr />
         <button onClick={handleClick}>Enter Game</button>
