@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import './App.css';
 import KittenCard from './KittenCard'
+import Emoji from 'a11y-react-emoji'
 
 function App() {
   const [text, setText] = React.useState(''); // creates state variable, retuns tuple
@@ -31,11 +32,11 @@ function App() {
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <h1>Welcome to Exploding Kittens</h1>
+        <Emoji label ="Exploding Kittens" symbol ="🙀💣💥"></Emoji>
         <h2>Enter Your Name Here:</h2>
         <p>
           {responseText}
         </p>
-        <KittenCard></KittenCard>
         <input value={text} onChange={e => setText(e.target.value)} />
         <hr />
         <button onClick={handleClick}>Enter Game</button>
