@@ -10,19 +10,26 @@ public class SparkDemo {
     port(1234);
     webSocket("/ws", WebSocketHandler.class);
 
+
+    // API DEBUGGING //
     get("/get", (req, res) -> {
       RouteObject route = new GetRoute(req.queryParams("name"));
       return route.localRes.getJson();
     });
+
     post("/delete", (req, res) ->{
       RouteObject route = new DeleteRoute(req.queryParams("name"));
       return route.localRes.getJson();
     });
+
+    /*
     get("/list", (req, res) ->{
       RouteObject route = new ListRoute();
       System.out.println(route.localRes.getJson());
       return route.localRes.getJson();
     });
+     */
+
     post("/add", (req, res) ->{
       RouteObject route = new AddRoute(req.body());
       System.out.println(route.localRes.getJson());
@@ -36,12 +43,13 @@ public class SparkDemo {
       return "Hello " + value;
     });
 
+    /*
     post("/postApi", (req, res) -> {
-      //Gson gson = new Gson();
-      //return gson.toJson(noteList);
+      Gson gson = new Gson();
+      return gson.toJson(noteList);
       return null;
     });
-
+    */
 
   }
 }
