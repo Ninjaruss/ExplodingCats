@@ -1,5 +1,6 @@
-package DTO;
+package GameObjects;
 
+import DTO.User;
 import GameObjects.*;
 import Cards.*;
 import java.util.*;
@@ -65,7 +66,7 @@ public class Game{
         }
     }
 
-    // DTO.Game loop //////////////////////////////
+    // GameObjects.Game loop //////////////////////////////
     public void startGame(){
         if (players.size() < playerMin){
             throw new RuntimeException("Not enough players to start the game.");
