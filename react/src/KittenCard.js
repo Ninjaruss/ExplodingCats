@@ -16,7 +16,10 @@ import Card from 'react-bootstrap/Card';
 
     const cardName = 'SKIP';//temporary info until connect to backend
     const cardDescription = 'Skip a players turn';
-
+    const clickCard=()=>{
+      //move to playPile
+       
+    }
 function KittenCard(){
     return( 	
     <div>
@@ -28,6 +31,13 @@ function KittenCard(){
         {cardDescription}
       </Card.Text>
     </Card.Body>
+    <Button
+        fullWidth
+        color="secondary"
+        variant="outlined"
+        onClick={clickCard}>
+        playStack
+    </Button>
   </Card>
   <br />
    </div>
