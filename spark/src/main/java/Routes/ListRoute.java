@@ -3,7 +3,6 @@ package Routes;
 import DTO.*;
 
 import java.util.ArrayList;
-import DTO.*;
 
 public class ListRoute extends RouteObject{
     public ListRoute(){
@@ -14,7 +13,7 @@ public class ListRoute extends RouteObject{
             // IF DONE SUCCESSFULLY RETURN SUCCESSFUL RESPONSE
             Response.Builder localResBuild = new Response.Builder();
             for (User user : fetchedData){
-                localResBuild.addResponse(user);
+                // localResBuild.addUserResponse(user);
             }
             localResBuild.setCode("Fetched all users successfully.");
             localRes = localResBuild.build();

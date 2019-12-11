@@ -11,7 +11,7 @@ public class GetRoute extends RouteObject{
             // IF DONE SUCCESSFULLY RETURN SUCCESSFUL RESPONSE
             localRes = new Response.Builder()
                     .set_id(user._id)
-                    .addResponse(user)
+                    .setUserResponse(user)
                     .setCode("Fetched user successfully.")
                     .build();
         } catch (Exception e) {
