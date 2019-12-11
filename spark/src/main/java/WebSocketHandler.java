@@ -56,6 +56,17 @@ public class WebSocketHandler {
         gameList.put(game.id, game);
     }
 
+    public static void leaveGame(User u){
+        for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
+            Game g = entry.getValue();
+            for (User user : g.getPlayerList()){
+                if (user.name == u.name){
+                    g.removePlayer(u.name);
+                }
+            }
+        }
+    }
+
     // Look for an open game to join, if none found make new game
     public static void findMatch(User u){
         for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
@@ -86,8 +97,16 @@ public class WebSocketHandler {
         }
     }
 
-    public static void playCard(Integer id){
-
+    // Plays a card from player's hand (NOTE: Card based on SPECIFIC POSITION)
+    public static void playCard(User u, int pos){
+        for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
+            Game g = entry.getValue();
+            for (User user : g.getPlayerList()){
+                if (user.name == u.name){
+                    g.playCard(u, pos);
+                }
+            }
+        }
     }
 
     @OnWebSocketConnect
@@ -101,17 +120,26 @@ public class WebSocketHandler {
     public void closed(Session session, int statusCode, String reason) {
         System.out.println("A client has disconnected");
         sessionMap.remove(session);
+
+        // Automatically remove disconnected user from their game and the online user list
+        for (Map.Entry<Session, User> entry : userMap.entrySet()){
+            if (entry.getKey() == session){
+                userMap.remove(entry.getValue());
+                leaveGame(entry.getValue());
+            }
+        }
     }
 
     @OnWebSocketMessage
     public void message(Session session, String message) throws IOException {
         Response response = gson.fromJson(message, Response.class);
 
-        // connectUser("username") - Create new User if username isn't in the database, returns a user
+        // connectUser(String username) - Create new User if username isn't in the database, returns a user
         if (response.getCommand() == "connectUser"){
             User u = userService.getUser(response.getStringResponse());
             Response.Builder newResponse = new Response.Builder();
 
+            // Check if user with name already exists
             if (u != null){
                         newResponse.setCode("User with name found! Data fetched.");
             } else {
@@ -122,15 +150,38 @@ public class WebSocketHandler {
             u.setSession(session); // Sets the user's session
             userMap.put(session, u); // Binds session to user
 
+            // Return a response message to the client
             newResponse.setUserResponse(u);
             newResponse.setCommand("userConnected");
             Response finalResponse = newResponse.build();
-
-            // Return a response message to the client
             session.getRemote().sendString(gson.toJson(finalResponse));
+
             findMatch(u);
         }
 
-        // playCard(GameObjects.Game id, String cardname)
+        // playNewGame(String username) - Search for a new game (if user just finished a game)
+        if (response.getCommand() == "playNewGame"){
+            User u = null;
+
+            // find user on userMap
+            for (Map.Entry<Integer, Game> entry : gameList.entrySet()) {
+                Game g = entry.getValue();
+                for (User user : g.getPlayerList()) {
+                    if (user.name == response.getStringResponse()){
+                        u = user;
+                    }
+                }
+            }
+
+            if (u != null){
+                leaveGame(response.getUserResponse());
+                findMatch(u);
+            }
+        }
+
+        // playCard(User u, String positionNum)
+        if (response.getCommand() == "playCard"){
+            playCard(response.getUserResponse(), Integer.parseInt(response.getStringResponse()));
+        }
     }
 }
