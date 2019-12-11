@@ -2,6 +2,7 @@ package DTO;
 
 import java.util.*;
 
+import GameObjects.Game;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -15,7 +16,7 @@ public class Response {
     private User userResponse;
     private String stringResponse;
     private JsonObject jsonResponse;
-    private List<User> userListResponse;
+    private Game gameResponse;
 
     public static class Builder{
         private Date date = null;
@@ -25,7 +26,7 @@ public class Response {
         private User userResponse = null;
         private String stringResponse = null;
         private JsonObject jsonResponse = null;
-        private List<User> userListResponse = null;
+        private Game gameResponse = null;
 
         // Sets a date when this object is created
         public Builder(){
@@ -42,13 +43,8 @@ public class Response {
             return this;
         }
 
-        public Builder addToUserListResponse(User user){
-            this.userListResponse.add(user);
-            return this;
-        }
-
-        public Builder setUserListResponse(List<User> users){
-            this.userListResponse = users;
+        public Builder setGameResponse(Game game){
+            this.gameResponse = game;
             return this;
         }
 
@@ -78,7 +74,7 @@ public class Response {
             res._id = this._id;
             res.command = this.command;
             res.userResponse = this.userResponse;
-            res.userListResponse = this.userListResponse;
+            res.gameResponse = this.gameResponse;
             res.stringResponse = this.stringResponse;
             res.jsonResponse = this.jsonResponse;
             res.responseCode = this.responseCode;
@@ -95,8 +91,8 @@ public class Response {
         return this.command;
     }
 
-    public List<User> getUserListResponse(){
-        return this.userListResponse;
+    public Game getGameResponse(){
+        return this.gameResponse;
     }
 
     public String getStringResponse(){

@@ -1,9 +1,9 @@
+package DTO;
+
 import GameObjects.*;
 import Cards.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-import DTO.*;
 
 
 public class Game{
@@ -65,7 +65,7 @@ public class Game{
         }
     }
 
-    // Game loop //////////////////////////////
+    // DTO.Game loop //////////////////////////////
     public void startGame(){
         if (players.size() < playerMin){
             throw new RuntimeException("Not enough players to start the game.");
@@ -73,11 +73,11 @@ public class Game{
         status = Status.IN_PROGRESS;
 
         deck.shuffle();
-        for(ArrayList<CardObject> hand : players.values()) {
+        for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()) {
             for (int i = 0; i < 7; i++) {
-                hand.add(deck.draw());
+                entry.getValue().add(deck.draw());
             }
-            hand.add(new Defuse());
+            entry.getValue().add(new Defuse());
         }
         deck.addNewCard("defuse", 2);
         deck.shuffle();
@@ -110,7 +110,17 @@ public class Game{
 
     }
 
+    public List<CardObject> getHand(String username){
+        for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
+            if (entry.getKey().name == username){
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     // Read-only functions ////////////////////////////
+
     public List<User> getPlayerList(){
         List<User> playerList = new ArrayList<User>();
         for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
