@@ -7,6 +7,7 @@ import Routes.*;
 
 public class SparkDemo {
   public static void main(String[] args) {
+    // Starts up a server and links the WebSocketHandler class
     port(1234);
     webSocket("/ws", WebSocketHandler.class);
 
