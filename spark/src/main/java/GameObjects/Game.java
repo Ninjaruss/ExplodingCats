@@ -1,8 +1,13 @@
 package GameObjects;
 
+import DTO.Response;
 import DTO.User;
 import GameObjects.*;
 import Cards.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +34,8 @@ public class Game{
     private boolean stillPlaying;
     private final int playerMin = 2;
     private final int playerMax = 4;
+
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public Game(){
         this.id = GAME_COUNT++;
@@ -108,16 +115,52 @@ public class Game{
     }
 
     public void playTurn(User u){
-
+        tellClient(u, "playTurn", "", "Your turn");
+        // tellAllClients(u, "");
     }
 
-    public List<CardObject> getHand(String username){
+    public void playCard(User u, int i){
+        ArrayList<CardObject> hand = getHand(u.name);
+        CardObject card = hand.remove(i);
+        stack.push(card);
+        tellAllClients("cardPlayed", card.name, "Card was played.");
+    }
+
+    public ArrayList<CardObject> getHand(String username){
         for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
             if (entry.getKey().name == username){
                 return entry.getValue();
             }
         }
         return null;
+    }
+
+    public void tellClient(User u, String command, String body, String code){
+        Response response = new Response.Builder()
+                .setCommand(command)
+                .setStringResponse(body)
+                .setCode(code)
+                .build();
+        try {
+            u.getSession().getRemote().sendString(gson.toJson(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void tellAllClients(String command, String body, String code){
+        Response response = new Response.Builder()
+                .setCommand(command)
+                .setStringResponse(body)
+                .setCode(code)
+                .build();
+        for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
+            try {
+                entry.getKey().getSession().getRemote().sendString(gson.toJson(response));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Read-only functions ////////////////////////////
