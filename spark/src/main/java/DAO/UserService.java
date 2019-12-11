@@ -45,14 +45,16 @@ public class UserService {
     public User addUser(String name){
         Date createdDate = new Date();
         Document doc = new Document("name", name)
-                .append("date", createdDate);
+                .append("date", createdDate)
+                .append("wins", 0);
         userList.insertOne(doc);
 
         // Return a note object for response check
         ObjectId id = (ObjectId)doc.get( "_id" );
         User user = new User(doc.getObjectId("_id").toString(),
                 doc.getString("name"),
-                doc.getDate("date"));
+                doc.getDate("date"),
+                doc.getInteger("wins", 0));
         return user;
     }
 
@@ -60,8 +62,16 @@ public class UserService {
         Document search = userList.find(eq("name", name)).first();
         User foundUser = new User(search.getObjectId("_id").toString(),
                 search.getString("name"),
-                search.getDate("date"));
+                search.getDate("date"),
+                search.getInteger("wins", 0));
         return foundUser;
+    }
+
+    public User addWin(String name){
+        User u = getUser(name);
+        userList.updateOne(eq("name", name), eq("wins", u.wins+1));
+        u = getUser(name);
+        return u;
     }
 
     public User deleteUser(String name){
@@ -79,7 +89,8 @@ public class UserService {
                 User user = new User(
                         current.getObjectId("_id").toString(),
                         current.getString("name"),
-                        current.getDate("date"));
+                        current.getDate("date"),
+                        current.getInteger("wins", 0));
                 list.add(user);
             }
         } finally {

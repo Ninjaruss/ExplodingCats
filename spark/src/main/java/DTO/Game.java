@@ -11,7 +11,7 @@ public class Game{
     private static int GAME_COUNT = 0;
 
     // This game's identifier
-    private final int id;
+    public final int id;
 
     // Lobby status
     public enum Status{
@@ -51,6 +51,14 @@ public class Game{
         }
     }
 
+    public void removePlayer(String username){
+        for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
+            if (entry.getKey().name == username){
+                players.remove(entry);
+            }
+        }
+    }
+
     private void setStatus(){
         if (winner != null){
             status = Status.FINISHED;
@@ -85,6 +93,7 @@ public class Game{
 
         while (stillPlaying){
             // play first player's turn
+
             // wait until player makes move or timer ends
 
             // place card in stack if card is played, allow other players to play cards on top
@@ -97,7 +106,19 @@ public class Game{
         }
     }
 
+    public void playTurn(User u){
+
+    }
+
     // Read-only functions ////////////////////////////
+    public List<User> getPlayerList(){
+        List<User> playerList = new ArrayList<User>();
+        for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
+            playerList.add(entry.getKey());
+        }
+        return playerList;
+    }
+
     public Deck getDeck(){
         return deck;
     }
