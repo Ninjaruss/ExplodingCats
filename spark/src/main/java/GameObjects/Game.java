@@ -2,7 +2,6 @@ package GameObjects;
 
 import DTO.Response;
 import DTO.User;
-import GameObjects.*;
 import Cards.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,6 +33,10 @@ public class Game{
     private boolean stillPlaying;
     private final int playerMin = 2;
     private final int playerMax = 4;
+    private String currentPlayer;
+    private boolean waitingInput;
+    private boolean playWindow;
+    private Thread thread;
 
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -42,6 +45,7 @@ public class Game{
         this.status = Status.WAITING;
         this.deck = new Deck().standard();
         this.stack = new PlayStack();
+        stack.currentGame = this;
         this.stillPlaying = true;
         players = new ConcurrentHashMap<User, ArrayList<CardObject>>();
     }
@@ -63,6 +67,7 @@ public class Game{
         for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
             if (entry.getKey().name == username){
                 players.remove(entry);
+                checkEmpty();
             }
         }
     }
@@ -100,30 +105,123 @@ public class Game{
 
 
         while (stillPlaying){
-            // play first player's turn
+            for (Map.Entry<User, ArrayList<CardObject>> entry : shuffledMap.entrySet()){
+                // play first player's turn
+                User u = entry.getKey();
+                currentPlayer = u.name;
+                playTurn(u);
 
-            // wait until player makes move or timer ends
+                // wait until player makes move or timer ends
+                int timeLeft = 60;
+                waitingInput = true;
+                while (waitingInput){
+                    try {
+                        thread.sleep(1000);
+                        timeLeft += -1;
+                        if (timeLeft == 0){
+                            waitingInput = false;
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            // place card in stack if card is played, allow other players to play cards on top
-            // execute stack
+                // allow other players to play cards on top
+                playCounterTurn();
+                timeLeft = 30;
+                playWindow = true;
+                while (playWindow){
+                    try {
+                        thread.sleep(1000);
+                        timeLeft += -1;
+                        if (timeLeft == 0){
+                            playWindow = false;
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            // draw card, explode if bomb (defuse bomb if defuse present)
-            // check if only one player is left, if yes then end the game
+                // execute stack
+                stack.execute();
 
-            // go to next player's turn
+                // draw card, explode if bomb (defuse bomb if defuse present)
+                CardObject drawnCard = deck.draw();
+                if (drawnCard.name == "bomb"){
+                    drawnCard.playedUser = u.name;
+                }
+                getHand(u.name).add(drawnCard);
+                drawnCard.onDraw(this);
+
+                // check if only one player is left, if yes then end the game
+                if (shuffledMap.keySet().size() == 1){
+                    for (Map.Entry<User, ArrayList<CardObject>> entry2 : shuffledMap.entrySet()){
+                        winGame(entry2.getKey().name);
+                        return;
+                    }
+                }
+                // go to next player's turn
+                currentPlayer = "";
+            }
         }
     }
 
+    public void winGame(String username){
+        User u = getUser(username);
+        if (u != null){
+            // update win
+        }
+    }
+
+    // Erase empty game lobby
+    public void checkEmpty(){
+        if (players.size() == 0){
+
+        }
+    }
+
+    public void playerDefeat(String username){
+        tellAllClients("playerLost", username, "A user has lost.");
+        User u = getUser(username);
+        tellClient(u, "youLose", username,"You lost!");
+        removePlayer(username);
+    }
+
     public void playTurn(User u){
-        tellClient(u, "playTurn", "", "Your turn");
-        // tellAllClients(u, "");
+        if (u.name == currentPlayer){
+            tellClient(u, "playTurn", "", "Your turn.");
+        }
+    }
+
+    public void playCounterTurn(){
+        tellAllClients("playCounterTurn", "", "You can play a card.");
     }
 
     public void playCard(User u, int i){
         ArrayList<CardObject> hand = getHand(u.name);
         CardObject card = hand.remove(i);
+        card.playedUser = u.name;
         stack.push(card);
         tellAllClients("cardPlayed", card.name, "Card was played.");
+        waitingInput = false;
+    }
+
+    public void playCard(User u, int i, String target){
+        ArrayList<CardObject> hand = getHand(u.name);
+        CardObject card = hand.remove(i);
+        card.playedUser = u.name;
+        card.targetUser = target;
+        stack.push(card);
+        tellAllClients("cardPlayed", card.name, "Card was played.");
+        waitingInput = false;
+    }
+
+    public void activateCard(String cardName){
+        tellAllClients("cardActivated", cardName, "Card was activated.");
+    }
+
+    public void stealCardFrom(String cardName, String fromUser, String toUser){
+
     }
 
     public ArrayList<CardObject> getHand(String username){
@@ -171,6 +269,16 @@ public class Game{
             playerList.add(entry.getKey());
         }
         return playerList;
+    }
+
+
+    public User getUser(String username){
+        for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()) {
+            if (entry.getKey().name == username){
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public Deck getDeck(){
