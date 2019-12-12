@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Deck{
     Stack<CardObject> deck = new Stack<CardObject>();
+    Game currentGame;
 
     public Deck standard(){
         deck.removeAllElements();
@@ -29,7 +30,8 @@ public class Deck{
 
     public CardObject draw(){
         CardObject card = deck.pop();
-        card.onDraw();
+        card.onDraw(currentGame);
+
         return card;
     }
 

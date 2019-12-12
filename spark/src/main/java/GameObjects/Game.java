@@ -44,6 +44,7 @@ public class Game{
         this.id = GAME_COUNT++;
         this.status = Status.WAITING;
         this.deck = new Deck().standard();
+        deck.currentGame = this;
         this.stack = new PlayStack();
         stack.currentGame = this;
         this.stillPlaying = true;
