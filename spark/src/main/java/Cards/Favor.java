@@ -1,6 +1,7 @@
 package Cards;
 
-import java.util.Stack;
+import GameObjects.*;
+import java.util.*;
 
 public class Favor extends CardObject{
     public Favor(){
@@ -9,7 +10,14 @@ public class Favor extends CardObject{
         desc = "Forces another player to give you a card.";
     }
 
-    public void activate(Stack<CardObject> stack){
-
+    public void activate(Game g){
+        ArrayList<CardObject> userHand = g.getHand(playedUser);
+        ArrayList<CardObject> targetHand = g.getHand(targetUser);
+        Random rand = new Random();
+        CardObject card = targetHand.get(rand.nextInt(targetHand.size()));
+        targetHand.remove(card);
+        userHand.add(card);
+        g.tellClient(g.getUser(playedUser), "StoleCard", card.name, "User has stolen a card.");
+        g.tellClient(g.getUser(targetUser), "CardStolen", card.name, "User has lost a card to Favor.");
     }
 }
