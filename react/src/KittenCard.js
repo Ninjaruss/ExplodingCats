@@ -39,8 +39,12 @@ function KittenCard(){
       </Card.Text>
     </Card.Body>
     <Button
-    onClick = {playCard}
-    >Use card</Button>
+        fullWidth
+        color="secondary"
+        variant="outlined"
+        onClick={clickCard}>
+        playStack
+    </Button>
   </Card>
   <br />
    </div>
