@@ -75,7 +75,7 @@ public class WebSocketHandler {
 
                 Response newResponse = new Response.Builder()
                         .setCommand("foundGame")
-                        .setGameResponse(entry.getValue())
+                        .setStringResponse(String.valueOf(entry.getValue().id)) ///////
                         .setCode("User has found and joined a game.")
                         .build();
                 try {
@@ -98,12 +98,12 @@ public class WebSocketHandler {
     }
 
     // Plays a card from player's hand (NOTE: Card based on SPECIFIC POSITION)
-    public static void playCard(User u, int pos){
+    public static void playCard(User u, int pos, String target){
         for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
             Game g = entry.getValue();
             for (User user : g.getPlayerList()){
                 if (user.name == u.name){
-                    g.playCard(u, pos);
+                    g.playCard(u, pos, target);
                 }
             }
         }
@@ -179,9 +179,13 @@ public class WebSocketHandler {
             }
         }
 
-        // playCard(User u, String positionNum)
+        // playCard(User u, String positionNum, String target)
         if (response.getCommand() == "playCard"){
-            playCard(response.getUserResponse(), Integer.parseInt(response.getStringResponse()));
+            String target = response.getStringResponse2();
+            if (target == null){
+                target = "";
+            }
+            playCard(response.getUserResponse(), Integer.parseInt(response.getStringResponse()), target);
         }
     }
 }
