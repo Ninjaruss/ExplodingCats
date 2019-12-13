@@ -15,11 +15,13 @@ public class Bomb extends CardObject{
     public void onDraw(Game g){
         ArrayList<CardObject> hand = g.getHand(playedUser);
         Iterator<CardObject> i = hand.iterator();
+        g.tellAllClients("cardActivated", this, "Bomb drawn.");
         while (i.hasNext()){
             CardObject card = i.next();
             if (card.name == "defuse"){
                 i.remove();
                 hand.remove(hand.size()-1);
+                g.tellAllClients("bombDefused", this.name, "User has defused the bomb.");
                 return;
             }
         }

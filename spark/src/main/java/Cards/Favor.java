@@ -17,7 +17,9 @@ public class Favor extends CardObject{
         CardObject card = targetHand.get(rand.nextInt(targetHand.size()));
         targetHand.remove(card);
         userHand.add(card);
+        g.updateHand(g.getUser(playedUser));
         g.tellClient(g.getUser(playedUser), "StoleCard", card.name, "User has stolen a card.");
         g.tellClient(g.getUser(targetUser), "CardStolen", card.name, "User has lost a card to Favor.");
+        g.tellAllClients("cardActivated", this, "Favor activated.");
     }
 }

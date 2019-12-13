@@ -14,5 +14,6 @@ public class SeeTheFuture extends CardObject{
         Deck deck = g.getDeck();
         String future = deck.peek(3);
         g.tellClient(g.getUser(playedUser), "SeeTheFuture", future, "User has seen the future.");
+        g.tellAllClients("cardActivated", this, "SeeTheFuture activated.");
     }
 }

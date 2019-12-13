@@ -12,6 +12,6 @@ public class Shuffle extends CardObject{
 
     public void activate(Game g){
         g.getDeck().shuffle();
-        // g.tellClient(g.getUser(playedUser), "StoleCard", card.name, "User has stolen a card.");
+        g.tellAllClients("cardActivated", this, "Shuffle activated.");
     }
 }
