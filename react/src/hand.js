@@ -10,7 +10,14 @@ import Button from 'react-bootstrap/Card';
 import { useState } from 'react';
 
 function hand(){
-const [playerHand,setPlayerHand] = useState([])
+const [playerHand,setPlayerHand] = useState([{
+  CardObject: {
+    name:"",
+    desc:""
+  }  
+}
+])
+
 
 //receive a hand from server. set hand to message
 ws.current.onmessage()=(message) =>{
@@ -19,21 +26,14 @@ ws.current.onmessage()=(message) =>{
     setPlayerHand(JSON(message.handResponse))
   }
 }
-const playerhand=[{
-    CardObject: {
-      name:"",
-      desc:""
-    }  
-  }
-]
 const handItem = (
   <li>  <Card bg="primary" text="white" style={{ width: '18rem' }}>
   <Card.Header>
-    {handResponse.name}
+    {CardObject.name}
     </Card.Header>
   <Card.Body>
     <Card.Text>
-      {handResponse.desc}
+      {CardObject.desc}
     </Card.Text>
   </Card.Body>
   <Button
@@ -45,9 +45,9 @@ const handItem = (
   </Card>
   </li>
  );
- 
+
 const createHand =
-playerHand.map((playerHand)=>
+playerHand.cardObject.map((playerHand)=>
   <handItem 
   key = {playerHand.name}
   value = {playerHand.desc}></handItem>
