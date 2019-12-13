@@ -221,7 +221,7 @@ public class Game{
         tellAllClients("playCounterTurn", "", "You can play a card.");
     }
 
-    public void updateHand(User u){ tellClient(u, "updateHand", getHand(u.name), "Update hand.");}
+    public void updateHand(User u){ tellClient(u, "updateHand", getHandArray(u.name), "Update hand.");}
 
     public void activateSkip(){
         skipActivated = true;
@@ -260,15 +260,6 @@ public class Game{
         tellAllClients("cardActivated", cardName, "Card was activated.");
     }
 
-    public ArrayList<CardObject> getHand(String username){
-        for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
-            if (entry.getKey().name.equals(username)){
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
     public void tellClient(User u, String command, String body, String code){
         Response response = new Response.Builder()
                 .setCommand(command)
@@ -295,7 +286,7 @@ public class Game{
         }
     }
 
-    public void tellClient(User u, String command, ArrayList<CardObject> hand, String code){
+    public void tellClient(User u, String command, CardObject[] hand, String code){
         Response response = new Response.Builder()
                 .setCommand(command)
                 .setHandResponse(hand)
@@ -354,6 +345,21 @@ public class Game{
             }
         }
         return null;
+    }
+
+    public ArrayList<CardObject> getHand(String username){
+        for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
+            if (entry.getKey().name.equals(username)){
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    public CardObject[] getHandArray(String username){
+        ArrayList<CardObject> hand = getHand(username);
+        CardObject[] array = hand.toArray(new CardObject[0]);
+        return array;
     }
 
     public String getCurrentPlayer(){

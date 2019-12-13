@@ -18,7 +18,7 @@ public class Response {
     private String stringResponse;
     private String stringResponse2;
     private CardObject cardResponse;
-    private ArrayList<CardObject> handResponse;
+    private CardObject[] handResponse;
 
     public static class Builder{
         private Date date = null;
@@ -29,7 +29,7 @@ public class Response {
         private String stringResponse = null;
         private String stringResponse2 = null;
         private CardObject cardResponse = null;
-        private ArrayList<CardObject> handResponse= null;
+        private CardObject[] handResponse= null;
 
         // Sets a date when this object is created
         public Builder(){
@@ -66,7 +66,7 @@ public class Response {
             return this;
         }
 
-        public Builder setHandResponse(ArrayList<CardObject> hand){
+        public Builder setHandResponse(CardObject[] hand){
             this.handResponse = hand;
             return this;
         }
@@ -116,7 +116,7 @@ public class Response {
         return this.cardResponse;
     }
 
-    public ArrayList<CardObject> getHandResponse(){return this.handResponse;}
+    public CardObject[] getHandResponse(){return this.handResponse;}
 
     public String getJson(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
