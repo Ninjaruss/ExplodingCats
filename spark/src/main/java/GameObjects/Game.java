@@ -192,7 +192,7 @@ public class Game{
         User u = getUser(username);
         if (u != null){
             // update win
-            tellClient(u, "youWon", "", "You won the game.");
+            tellClient(u, "youWin", "", "You won the game.");
             userService.addWin(username);
         }
     }
