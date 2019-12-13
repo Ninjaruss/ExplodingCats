@@ -62,12 +62,19 @@ public class WebSocketHandler {
             for (User user : g.getPlayerList()){
                 if (user.name.equals(u.name)){
                     g.removePlayer(u.name);
+                    removeEmptyGames();
                 }
             }
         }
     }
 
+    public static void removeEmptyGames(){
+        gameList.entrySet().removeIf(entries -> entries.getValue().getPlayerList().size() == 0
+                && entries.getValue().getStatus() == Game.Status.FINISHED);
+    }
+
     // Look for an open game to join, if none found make new game
+    // (also erases empty games that are finished)
     public static void findMatch(User u){
         for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
             if (entry.getValue().getStatus() == Game.Status.WAITING){
@@ -163,7 +170,7 @@ public class WebSocketHandler {
         if (response.getCommand().equals("playNewGame")){
             User u = null;
 
-            // find user on userMap
+            // Remove player user from any games in the game list
             for (Map.Entry<Integer, Game> entry : gameList.entrySet()) {
                 Game g = entry.getValue();
                 for (User user : g.getPlayerList()) {
@@ -175,8 +182,9 @@ public class WebSocketHandler {
 
             if (u != null){
                 leaveGame(response.getUserResponse());
-                findMatch(u);
             }
+
+            findMatch(u);
         }
 
         // playCard(User u, String positionNum, String target)

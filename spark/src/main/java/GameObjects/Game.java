@@ -197,10 +197,10 @@ public class Game{
         }
     }
 
-    // Erase empty game lobby
+    // Close empty game lobby
     public void checkEmpty(){
         if (players.size() == 0){
-
+            status = Status.FINISHED;
         }
     }
 
@@ -247,7 +247,12 @@ public class Game{
         }
         stack.push(card);
         tellAllClients("cardPlayed", card.name, "Card was played.");
-        waitingInput = false;
+        if (waitingInput){
+            waitingInput = false;
+        }
+        if (playWindow){
+
+        }
         updateHand(u);
     }
 
@@ -334,7 +339,6 @@ public class Game{
     }
 
     // Read-only functions ////////////////////////////
-
     public List<User> getPlayerList(){
         List<User> playerList = new ArrayList<User>();
         for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
@@ -343,7 +347,6 @@ public class Game{
         return playerList;
     }
 
-
     public User getUser(String username){
         for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()) {
             if (entry.getKey().name.equals(username)){
@@ -351,6 +354,10 @@ public class Game{
             }
         }
         return null;
+    }
+
+    public String getCurrentPlayer(){
+        return currentPlayer;
     }
 
     public Deck getDeck(){
