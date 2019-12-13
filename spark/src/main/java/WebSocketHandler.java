@@ -60,7 +60,7 @@ public class WebSocketHandler {
         for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
             Game g = entry.getValue();
             for (User user : g.getPlayerList()){
-                if (user.name == u.name){
+                if (user.name.equals(u.name)){
                     g.removePlayer(u.name);
                 }
             }
@@ -102,7 +102,7 @@ public class WebSocketHandler {
         for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
             Game g = entry.getValue();
             for (User user : g.getPlayerList()){
-                if (user.name == u.name){
+                if (user.name.equals(u.name)){
                     g.playCard(u, pos, target);
                 }
             }
@@ -135,7 +135,7 @@ public class WebSocketHandler {
         Response response = gson.fromJson(message, Response.class);
 
         // connectUser(String username) - Create new User if username isn't in the database, returns a user
-        if (response.getCommand() == "connectUser"){
+        if (response.getCommand().equals("connectUser")){
             User u = userService.getUser(response.getStringResponse());
             Response.Builder newResponse = new Response.Builder();
 
@@ -160,7 +160,7 @@ public class WebSocketHandler {
         }
 
         // playNewGame(String username) - Search for a new game (if user just finished a game)
-        if (response.getCommand() == "playNewGame"){
+        if (response.getCommand().equals("playNewGame")){
             User u = null;
 
             // find user on userMap
@@ -180,12 +180,13 @@ public class WebSocketHandler {
         }
 
         // playCard(User u, String positionNum, String target)
-        if (response.getCommand() == "playCard"){
+        if (response.getCommand().equals("playCard")){
             String target = response.getStringResponse2();
-            if (target == null){
+            if (target.equals(null)){
                 target = "";
             }
             playCard(response.getUserResponse(), Integer.parseInt(response.getStringResponse()), target);
         }
+
     }
 }

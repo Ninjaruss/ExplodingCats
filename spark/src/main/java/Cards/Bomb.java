@@ -18,7 +18,7 @@ public class Bomb extends CardObject{
         g.tellAllClients("cardActivated", this, "Bomb drawn.");
         while (i.hasNext()){
             CardObject card = i.next();
-            if (card.name == "defuse"){
+            if (card.name.equals("defuse")){
                 i.remove();
                 hand.remove(hand.size()-1);
                 g.tellAllClients("bombDefused", this.name, "User has defused the bomb.");

@@ -70,7 +70,7 @@ public class Game{
 
     public void removePlayer(String username){
         for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
-            if (entry.getKey().name == username){
+            if (entry.getKey().name.equals(username)){
                 players.remove(entry);
                 checkEmpty();
             }
@@ -168,7 +168,7 @@ public class Game{
                 // draw card, explode if bomb (defuse bomb if defuse present)
                 if (skipActivated = false){
                     CardObject drawnCard = deck.draw();
-                    if (drawnCard.name == "bomb"){
+                    if (drawnCard.name.equals("bomb")){
                         drawnCard.playedUser = u.name;
                     }
                     getHand(u.name).add(drawnCard);
@@ -212,7 +212,7 @@ public class Game{
     }
 
     public void playTurn(User u){
-        if (u.name == currentPlayer){
+        if (u.name.equals(currentPlayer)){
             tellClient(u, "playTurn", "", "Your turn.");
         }
     }
@@ -229,7 +229,7 @@ public class Game{
 
     public CardObject drawFromDeck(String userName){
         CardObject card = deck.draw();
-        if (card.name == "bomb"){
+        if (card.name.equals("bomb")){
             card.playedUser = userName;
         }
         getHand(userName).add(card);
@@ -257,7 +257,7 @@ public class Game{
 
     public ArrayList<CardObject> getHand(String username){
         for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
-            if (entry.getKey().name == username){
+            if (entry.getKey().name.equals(username)){
                 return entry.getValue();
             }
         }
@@ -346,7 +346,7 @@ public class Game{
 
     public User getUser(String username){
         for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()) {
-            if (entry.getKey().name == username){
+            if (entry.getKey().name.equals(username)){
                 return entry.getKey();
             }
         }
