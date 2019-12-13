@@ -2,6 +2,7 @@ package DTO;
 
 import java.util.*;
 
+import Cards.CardObject;
 import GameObjects.Game;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,8 +16,9 @@ public class Response {
     private String command;
     private User userResponse;
     private String stringResponse;
-    private JsonObject jsonResponse;
-    private Game gameResponse;
+    private String stringResponse2;
+    private CardObject cardResponse;
+    private ArrayList<CardObject> handResponse;
 
     public static class Builder{
         private Date date = null;
@@ -25,8 +27,9 @@ public class Response {
         private String command = null;
         private User userResponse = null;
         private String stringResponse = null;
-        private JsonObject jsonResponse = null;
-        private Game gameResponse = null;
+        private String stringResponse2 = null;
+        private CardObject cardResponse = null;
+        private ArrayList<CardObject> handResponse= null;
 
         // Sets a date when this object is created
         public Builder(){
@@ -43,11 +46,6 @@ public class Response {
             return this;
         }
 
-        public Builder setGameResponse(Game game){
-            this.gameResponse = game;
-            return this;
-        }
-
         public Builder setUserResponse(User user){
             this.userResponse = user;
             return this;
@@ -58,8 +56,18 @@ public class Response {
             return this;
         }
 
-        public Builder setJsonResponse(JsonObject json){
-            this.jsonResponse = json;
+        public Builder setStringResponse2(String str){
+            this.stringResponse2 = str;
+            return this;
+        }
+
+        public Builder setCardResponse(CardObject card){
+            this.cardResponse = card;
+            return this;
+        }
+
+        public Builder setHandResponse(ArrayList<CardObject> hand){
+            this.handResponse = hand;
             return this;
         }
 
@@ -74,9 +82,10 @@ public class Response {
             res._id = this._id;
             res.command = this.command;
             res.userResponse = this.userResponse;
-            res.gameResponse = this.gameResponse;
             res.stringResponse = this.stringResponse;
-            res.jsonResponse = this.jsonResponse;
+            res.stringResponse2 = this.stringResponse2;
+            res.cardResponse = this.cardResponse;
+            res.handResponse = this.handResponse;
             res.responseCode = this.responseCode;
             return res;
         }
@@ -91,21 +100,23 @@ public class Response {
         return this.command;
     }
 
-    public Game getGameResponse(){
-        return this.gameResponse;
-    }
-
     public String getStringResponse(){
         return this.stringResponse;
+    }
+
+    public String getStringResponse2(){
+        return this.stringResponse2;
     }
 
     public User getUserResponse(){
         return this.userResponse;
     }
 
-    public JsonObject getJsonResponse(){
-        return this.jsonResponse;
+    public CardObject getCardResponse(){
+        return this.cardResponse;
     }
+
+    public ArrayList<CardObject> getHandResponse(){return this.handResponse;}
 
     public String getJson(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
