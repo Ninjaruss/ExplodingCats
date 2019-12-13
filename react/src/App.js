@@ -3,17 +3,17 @@ import './App.css';
 import Emoji from 'a11y-react-emoji'
 
 function App() {
-  const [text,setText] = useState('')
+  const [text,setText] = React.useState('')
 
-  const initialResponse = {
-    _id: '',
-    command: '',
-    gameResponse: Game, 
-    userResponse: User, 
-    stringResponse: '', 
-    jsonResponse: '',
-    responseCode: ''
-  }
+  // const initialResponse = {
+  //   _id: '',
+  //   command: '',
+  //   gameResponse: Game, 
+  //   userResponse: User, 
+  //   stringResponse: '', 
+  //   jsonResponse: '',  
+  //   responseCode: ''
+  // }
   
   // function reducer(state, action) {
   //   switch(action.type) {
