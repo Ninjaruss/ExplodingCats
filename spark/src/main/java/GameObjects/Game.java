@@ -1,5 +1,6 @@
 package GameObjects;
 
+import DAO.UserService;
 import DTO.Response;
 import DTO.User;
 import Cards.*;
@@ -27,6 +28,8 @@ public class Game{
     // List of players with their corresponding hands
     private Map<User, ArrayList<CardObject>> players;
 
+    static UserService userService = UserService.getDataBase();
+
     private final Deck deck;
     private final PlayStack stack;
     private String winner;
@@ -36,6 +39,7 @@ public class Game{
     private String currentPlayer;
     private boolean waitingInput;
     private boolean playWindow;
+    private boolean skipActivated;
     private Thread thread;
 
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -86,31 +90,38 @@ public class Game{
         }
         status = Status.IN_PROGRESS;
 
+        // Set up the cards for each player in the game
         deck.shuffle();
         for(Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()) {
             for (int i = 0; i < 7; i++) {
-                entry.getValue().add(deck.draw());
+                CardObject card = deck.draw();
+                entry.getValue().add(card);
+                tellClient(entry.getKey(), "cardDrawn", card, "Card has been drawn.");
+                updateHand(entry.getKey());
             }
             entry.getValue().add(new Defuse());
+            updateHand(entry.getKey());
         }
         deck.addNewCard("defuse", 2);
         deck.shuffle();
 
         // Shuffle player order
+        /*
         List<Map.Entry<User, ArrayList<CardObject>>> entries = new ArrayList<>(players.entrySet());
         Collections.shuffle(entries);
         Map<User, ArrayList<CardObject>> shuffledMap = new LinkedHashMap<>();
         for (Map.Entry<User, ArrayList<CardObject>> entry : entries) {
             shuffledMap.put(entry.getKey(), entry.getValue());
         }
-
+        */
 
         while (stillPlaying){
-            for (Map.Entry<User, ArrayList<CardObject>> entry : shuffledMap.entrySet()){
+            for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
                 // play first player's turn
                 User u = entry.getKey();
                 currentPlayer = u.name;
                 playTurn(u);
+                skipActivated = false;
 
                 // wait until player makes move or timer ends
                 int timeLeft = 60;
@@ -145,18 +156,28 @@ public class Game{
 
                 // execute stack
                 stack.execute();
+                stack.isExecuting = true;
+                while (stack.isExecuting = true){
+                    try {
+                        thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 // draw card, explode if bomb (defuse bomb if defuse present)
-                CardObject drawnCard = deck.draw();
-                if (drawnCard.name == "bomb"){
-                    drawnCard.playedUser = u.name;
+                if (skipActivated = false){
+                    CardObject drawnCard = deck.draw();
+                    if (drawnCard.name == "bomb"){
+                        drawnCard.playedUser = u.name;
+                    }
+                    getHand(u.name).add(drawnCard);
+                    drawnCard.onDraw(this);
                 }
-                getHand(u.name).add(drawnCard);
-                drawnCard.onDraw(this);
 
                 // check if only one player is left, if yes then end the game
-                if (shuffledMap.keySet().size() == 1){
-                    for (Map.Entry<User, ArrayList<CardObject>> entry2 : shuffledMap.entrySet()){
+                if (players.keySet().size() == 1){
+                    for (Map.Entry<User, ArrayList<CardObject>> entry2 : players.entrySet()){
                         winGame(entry2.getKey().name);
                         return;
                     }
@@ -171,6 +192,8 @@ public class Game{
         User u = getUser(username);
         if (u != null){
             // update win
+            tellClient(u, "youWon", "", "You won the game.");
+            userService.addWin(username);
         }
     }
 
@@ -182,7 +205,7 @@ public class Game{
     }
 
     public void playerDefeat(String username){
-        tellAllClients("playerLost", username, "A user has lost.");
+        tellAllClients("playerLost", username, "A player has lost.");
         User u = getUser(username);
         tellClient(u, "youLose", username,"You lost!");
         removePlayer(username);
@@ -198,31 +221,38 @@ public class Game{
         tellAllClients("playCounterTurn", "", "You can play a card.");
     }
 
-    public void playCard(User u, int i){
-        ArrayList<CardObject> hand = getHand(u.name);
-        CardObject card = hand.remove(i);
-        card.playedUser = u.name;
-        stack.push(card);
-        tellAllClients("cardPlayed", card.name, "Card was played.");
-        waitingInput = false;
+    public void updateHand(User u){ tellClient(u, "updateHand", getHand(u.name), "Update hand.");}
+
+    public void activateSkip(){
+        skipActivated = true;
+    }
+
+    public CardObject drawFromDeck(String userName){
+        CardObject card = deck.draw();
+        if (card.name == "bomb"){
+            card.playedUser = userName;
+        }
+        getHand(userName).add(card);
+        card.onDraw(this);
+        updateHand(getUser(userName));
+        return card;
     }
 
     public void playCard(User u, int i, String target){
         ArrayList<CardObject> hand = getHand(u.name);
         CardObject card = hand.remove(i);
         card.playedUser = u.name;
-        card.targetUser = target;
+        if (card.name.equals("Favor") || card.name.equals("Attack")){
+            card.targetUser = target;
+        }
         stack.push(card);
         tellAllClients("cardPlayed", card.name, "Card was played.");
         waitingInput = false;
+        updateHand(u);
     }
 
     public void activateCard(String cardName){
         tellAllClients("cardActivated", cardName, "Card was activated.");
-    }
-
-    public void stealCardFrom(String cardName, String fromUser, String toUser){
-
     }
 
     public ArrayList<CardObject> getHand(String username){
@@ -247,10 +277,51 @@ public class Game{
         }
     }
 
+    public void tellClient(User u, String command, CardObject card, String code){
+        Response response = new Response.Builder()
+                .setCommand(command)
+                .setCardResponse(card)
+                .setCode(code)
+                .build();
+        try {
+            u.getSession().getRemote().sendString(gson.toJson(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void tellClient(User u, String command, ArrayList<CardObject> hand, String code){
+        Response response = new Response.Builder()
+                .setCommand(command)
+                .setHandResponse(hand)
+                .setCode(code)
+                .build();
+        try {
+            u.getSession().getRemote().sendString(gson.toJson(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void tellAllClients(String command, String body, String code){
         Response response = new Response.Builder()
                 .setCommand(command)
                 .setStringResponse(body)
+                .setCode(code)
+                .build();
+        for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
+            try {
+                entry.getKey().getSession().getRemote().sendString(gson.toJson(response));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void tellAllClients(String command, CardObject card, String code){
+        Response response = new Response.Builder()
+                .setCommand(command)
+                .setCardResponse(card)
                 .setCode(code)
                 .build();
         for (Map.Entry<User, ArrayList<CardObject>> entry : players.entrySet()){
