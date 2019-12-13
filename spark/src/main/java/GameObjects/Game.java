@@ -257,7 +257,7 @@ public class Game{
             waitingInput = false;
         }
         if (playWindow){
-
+            playWindow = false;
         }
         updateHand(u);
     }
