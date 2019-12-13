@@ -238,6 +238,12 @@ public class Game{
         return card;
     }
 
+    public void passTurn(User u){
+        if (waitingInput){
+            waitingInput = false;
+        }
+    }
+
     public void playCard(User u, int i, String target){
         ArrayList<CardObject> hand = getHand(u.name);
         CardObject card = hand.remove(i);

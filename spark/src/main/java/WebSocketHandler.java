@@ -116,6 +116,17 @@ public class WebSocketHandler {
         }
     }
 
+    public static void passTurn(User u){
+        for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
+            Game g = entry.getValue();
+            for (User user : g.getPlayerList()){
+                if (user.name.equals(u.name)){
+                    g.passTurn(u);
+                }
+            }
+        }
+    }
+
     @OnWebSocketConnect
     public void connected(Session session) throws IOException {
         System.out.println("A client has connected");
@@ -196,5 +207,8 @@ public class WebSocketHandler {
             playCard(response.getUserResponse(), Integer.parseInt(response.getStringResponse()), target);
         }
 
+        if (response.getCommand().equals("passTurn")){
+            passTurn(response.getUserResponse());
+        }
     }
 }
