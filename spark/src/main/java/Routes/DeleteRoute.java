@@ -11,7 +11,7 @@ public class DeleteRoute extends RouteObject{
             // IF DONE SUCCESSFULLY RETURN SUCCESSFUL RESPONSE
             localRes = new Response.Builder()
                     .set_id(user._id)
-                    .addResponse(user)
+                    .setUserResponse(user)
                     .setCode("User deleted successfully.")
                     .build();
         } catch (Exception e) {

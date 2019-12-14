@@ -1,4 +1,4 @@
-package main.java.Routes;
+package Routes;
 
 public class Matchmaking {
 }

@@ -1,5 +1,6 @@
 package Cards;
 
+import GameObjects.*;
 import java.util.Stack;
 
 public class SeeTheFuture extends CardObject{
@@ -9,7 +10,10 @@ public class SeeTheFuture extends CardObject{
         desc = "Allows you to see the top 3 cards of the deck.";
     }
 
-    public void activate(){
-
+    public void activate(Game g){
+        Deck deck = g.getDeck();
+        String future = deck.peek(3);
+        g.tellClient(g.getUser(playedUser), "SeeTheFuture", future, "User has seen the future.");
+        g.tellAllClients("cardActivated", this, "SeeTheFuture activated.");
     }
 }

@@ -22,7 +22,7 @@
 ## Breakdown of Features and Team Member Tasks:
 *- Game loop  :  Yan &  Russell
 *- Card Manipulation  :  Russell
-*- UI  :  Tyler +Siam   
+*- UI  :  Tyler  
 - Lobby:  Siam
 - Matchmaking  :  Tyler &  Yan
 - Leaderboard  :  Siam 

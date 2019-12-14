@@ -7,7 +7,7 @@ import ws from './App'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Card';
-import React from 'react';
+import { useState } from 'react';
 
 function hand(){
 const [playerHand,setPlayerHand] = useState([{
