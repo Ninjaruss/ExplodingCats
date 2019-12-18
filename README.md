@@ -26,6 +26,12 @@
 - Lobby:  Siam
 - Matchmaking  :  Tyler &  Yan
 - Leaderboard  :  Siam 
-    
+
+## How to run locally
+1. In vscode, go to the terminal and type "cd react".
+2. then, type "npm run-script build"
+3. if it works, then type "npm run-script start". the development server will start and a localhost://3000 will open with the webapp.
+4. then start the back end by going to intellij and open spark-->src-->SparkDemo.java. click the play button.
+
 
 
