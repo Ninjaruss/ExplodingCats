@@ -16,7 +16,14 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
 .App-link {
   color: #09d3ac;
+}
+.body{
+  background-color: brown;
+}
+.card{
+  display:flex;
+  position: fixed;
+  bottom: 0
 }

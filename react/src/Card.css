@@ -1,0 +1,8 @@
+.card-element {
+    background: white;
+    width:150px;
+    height:250px;
+    border: 12.5pm solid black;
+    border-radius:12.5px;
+    border-style: solid;
+}
