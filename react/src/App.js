@@ -1,10 +1,7 @@
 import React from 'react';
 import './App.css';
-<<<<<<< HEAD
 import hand from './hand';
-=======
 import Emoji from 'a11y-react-emoji'
->>>>>>> 85691dbd9b18894b66a868a5028c07a49c27d799
 
 function App() {
   const [text,setText] = React.useState('')
@@ -74,13 +71,10 @@ function App() {
         <h1>Welcome to Exploding Kittens</h1>
         <Emoji label ="Exploding Kittens" symbol ="🙀💣💥"></Emoji>
         <h2>Enter Your Name Here:</h2>
-<<<<<<< HEAD
         <p>
           {responseText}
         </p>
         <hand></hand>
-=======
->>>>>>> 85691dbd9b18894b66a868a5028c07a49c27d799
         <input value={text} onChange={e => setText(e.target.value)} />
         <hr />
         <button onClick={handleClick}>Enter Game</button>
