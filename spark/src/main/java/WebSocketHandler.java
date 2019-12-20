@@ -1,3 +1,4 @@
+import Cards.CardObject;
 import GameObjects.Game;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -116,6 +117,19 @@ public class WebSocketHandler {
         }
     }
 
+    // Plays a card from player's hand (NOTE: Card based on SPECIFIC POSITION)
+    public static CardObject[] getHand(User u){
+        for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
+            Game g = entry.getValue();
+            for (User user : g.getPlayerList()){
+                if (user.name.equals(u.name)){
+                    return (CardObject[]) g.getHand(user.name).toArray();
+                }
+            }
+        }
+        return null;
+    }
+
     public static void passTurn(User u){
         for (Map.Entry<Integer, Game> entry : gameList.entrySet()){
             Game g = entry.getValue();
@@ -209,6 +223,15 @@ public class WebSocketHandler {
 
         if (response.getCommand().equals("passTurn")){
             passTurn(response.getUserResponse());
+        }
+
+        if (response.getCommand().equals("getHand")){
+            Response.Builder newResponse = new Response.Builder();
+            newResponse.setCommand("updateHand");
+            newResponse.setCode("Hand fetched.");
+            newResponse.setHandResponse(getHand(response.getUserResponse()));
+            Response finalResponse = newResponse.build();
+            session.getRemote().sendString(gson.toJson(finalResponse));
         }
     }
 }
