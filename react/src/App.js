@@ -4,8 +4,12 @@ import Emoji from 'a11y-react-emoji'
 import Card from './Card'
 import './Card.css'
 
+const wsSession = new WebSocket(`ws://localhost:1234/ws`);
+
 function App() {
-  const ws = React.useRef(new WebSocket(`ws://${window.location.host}/ws`));
+  //const ws = React.useRef(new WebSocket(`ws://${window.location.host}/ws`));
+  const ws = React.useRef(wsSession);
+
   ws.current.onopen = () => {
     console.log('Connection open!')
   };
