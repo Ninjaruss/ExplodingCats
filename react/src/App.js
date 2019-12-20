@@ -3,6 +3,7 @@ import './App.css';
 import Emoji from 'a11y-react-emoji'
 import Card from './Card'
 import './Card.css'
+
 function App() {
   const ws = React.useRef(new WebSocket(`ws://${window.location.host}/ws`));
   ws.current.onopen = () => {
@@ -27,6 +28,7 @@ function App() {
       <body className="body">
         <Card></Card>
        </body>
+
     </div>
   );
 }
