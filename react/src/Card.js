@@ -4,21 +4,22 @@ import ws from './App';
 
 const Card = ()=>{
     const [cardObject,setCardObject] = useState({
-        name:"Yay" , 
-        desc:"You did it"
+        command:"cardPlayed",
+        name:"" , 
+        desc:""
     })
-
-    // ws.current.onmessage = (message) => {
-    // console.log(message);
-    // setCardObject(String(message.data));
-    // }
+    ws.current.onmessage = (message) => {
+     console.log(message);
+     setCardObject(String(message.data));
+    }
     const playThisCard=()=>{
         ws.current.send(cardObject);
-        console.log("hello") //testing     
+        console.log("card object sent to server") //testing     
     }
    return(
         <div className = "card-element" 
-          onClick={playThisCard}>
+          onClick={()=>{playThisCard()}}
+          >
           <h1>{cardObject.name}</h1>
           <h2>{cardObject.desc}</h2>
       </div>
