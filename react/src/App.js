@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Card from './Card'
 import './Card.css'
+import playStack from './playStack'
 
 export const wsSession = new WebSocket(`ws://localhost:1234/ws`);
 
@@ -42,6 +43,7 @@ function App() {
 			<input type = "text" name = "username" onChange={e => setUsername(e.target.value)} />
 	  </label>
 	</form>
+  <playStack></playStack>
       <body className="body">
         <Card></Card>
        </body>
