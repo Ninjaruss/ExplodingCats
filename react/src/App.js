@@ -3,16 +3,19 @@ import './App.css';
 import Card from './Card'
 import './Card.css'
 
-const wsSession = new WebSocket(`ws://localhost:1234/ws`);
+export const wsSession = new WebSocket(`ws://localhost:1234/ws`);
+
 function App() {
   const [username,setUsername] = React.useState("")
   //const ws = React.useRef(new WebSocket(`ws://${window.location.host}/ws`));
   const ws = React.useRef(wsSession);
+  const t = "ahhhh";
+
   const userResponse={
     command:"connectUser",
     stringResponse: username 
   }
-  ws.current.send(userResponse)
+  
   ws.current.onopen = () => {
     console.log('Connection open!')
   };
@@ -24,11 +27,21 @@ function App() {
   ws.current.onerror = () => {
     console.log('ws error');
   };
+  
+  const connectUser = (e) =>{
+	e.preventDefault();
+	console.log('connectUser called');
+  	ws.current.send(JSON.stringify(userResponse));
+  }
 
   return (
     <div className="welcome-page">
       <header className="App-header">Welcome to Exploding Kittens</header>
-        <input onSubmit={setUsername}>Enter your name</input>
+	<form onSubmit = {connectUser}>
+	  <label> Username
+			<input type = "text" name = "username" onChange={e => setUsername(e.target.value)} />
+	  </label>
+	</form>
       <body className="body">
         <Card></Card>
        </body>
