@@ -1,6 +1,6 @@
 import './Card.css'
 import React, { useState } from 'react';
-import ws from './App';
+import {wsSession} from './App';
 
 const Card = ()=>{
     const [cardObject,setCardObject] = useState({
@@ -8,6 +8,7 @@ const Card = ()=>{
         name:"" , 
         desc:""
     })
+	const ws = React.useRef(wsSession);
     ws.current.onmessage = (message) => {
      console.log(message);
      setCardObject(String(message.data));
