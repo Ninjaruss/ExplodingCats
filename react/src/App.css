@@ -16,6 +16,11 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.Name {
+  background-color: bisque;
+  display: flex;
+}
+
 .App-link {
   color: #09d3ac;
 }

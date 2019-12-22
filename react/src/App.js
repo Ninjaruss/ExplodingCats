@@ -11,6 +11,13 @@ function App() {
   const ws = React.useRef(wsSession);
   const t = "ahhhh";
 
+ 
+  const userInfo=(event)=> {
+    if (event.keyCode === 13) {
+      console.log('enter')
+    }
+  }
+
   const userResponse={
     command:"connectUser",
     stringResponse: username 
@@ -37,11 +44,17 @@ function App() {
   return (
     <div className="welcome-page">
       <header className="App-header">Welcome to Exploding Kittens</header>
-	<form onSubmit = {connectUser}>
+   
+    <div className="Name">
+        <h1>Enter your name</h1>
+        <input  type='text' onKeyDown={(e) => userInfo(e) }/>
+    </div>
+
+	{/* <form onSubmit = {connectUser}>
 	  <label> Username
 			<input type = "text" name = "username" onChange={e => setUsername(e.target.value)} />
 	  </label>
-	</form>
+	</form> */}
       <body className="body">
         <Card></Card>
        </body>
