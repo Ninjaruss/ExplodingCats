@@ -1,4 +1,4 @@
-# Original ReadMe
+# Original
 ## UI Mock-up
 <img width="852" alt="Screen Shot 2019-11-07 at 6 28 02 PM" src="https://user-images.githubusercontent.com/23036145/68445448-d3494680-018e-11ea-9423-e24a06c7ac79.png">
 
